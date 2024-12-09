@@ -28,6 +28,7 @@ def main():
     # Print the total sum with an appropriate message
     print(f"The sum of {num1} and {num2} is {total}")
 
-# Call the main function                
+
+# Call the main function
 if __name__ == "__main__":
-    main()  
+    main()
