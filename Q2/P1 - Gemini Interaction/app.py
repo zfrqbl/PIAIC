@@ -1,3 +1,21 @@
+# PIAIC Q2 - Project 1
+# LangChain Gemini Interaction
+# Problem Statement
+
+#Create a simple LangChain Colab Notebook that uses the Google Gemini Flash 2.0 model to answer user questions.
+
+# Next,
+
+# Experiment with Prompts: Add more prompt templates to see how the model responds.
+# Add Memory: Use LangChain’s memory feature to make the interaction multi-turn.
+# Integrate Tools: Extend the chain to include tools like database queries or APIs.
+# Explore Gemini Features: Adjust temperature, max tokens, and other parameters to optimize responses.
+
+
+
+
+
+
 # Import the required libraries and modules
 import os
 from langchain_google_genai import ChatGoogleGenerativeAI
