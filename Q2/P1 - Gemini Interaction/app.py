@@ -23,6 +23,11 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain.memory import ConversationBufferMemory
 from dotenv import load_dotenv
+import requests
+import warnings 
+
+# Ignore warnings
+warnings.filterwarnings('ignore')
 
 # Load the environment variables from the .env file
 load_dotenv()
@@ -38,7 +43,7 @@ if not api_key:
 llm = ChatGoogleGenerativeAI(
     api_key=api_key,
     model="gemini-1.5-flash",
-    temperature=0.7
+    temperature=0.5
 )
 
 # Set up memory for conversation
@@ -46,13 +51,23 @@ llm = ChatGoogleGenerativeAI(
 # crtitical for avoiding the expected one key error 
 memory = ConversationBufferMemory(input_key="combined_input")  
 
-# Prompt the user for the LLM's role
+# Prompt the user for the LLM's role and time details
 role = input("What role should the LLM assume? > ")
 addDetails = input("Do you want to add any additional details? > ")
+city = input("What city are you in > ")
+
+
+# Form the URL and get the API response
+url = f"http://api.weatherapi.com/v1/current.json?key=71d09dc94eab4744bf974252242612&q={city}"
+weather = requests.get(url)
+temprature = weather.json()['current']['temp_c']
+condition = weather.json()['current']['condition']['text']  
+time = weather.json()['location']['localtime']
+
 
 # Define the prompt template
 template = '''You are a helpful assistant acting as a {role}. Use these details for further information about the role: {addDetails}. Answer the following question:
-{combined_input}
+Please use the following context for your response:{combined_input}
 {history}
 '''
 
@@ -80,7 +95,7 @@ while True:
             break
 
         # Combine role and question into a single input
-        combined_input = f"Role: {role}\nQuestion: {question}"
+        combined_input = f"Role: {role}\nQuestion: {question}\ntime: {time}, \ntemprature: {temprature}\n condition: {condition}\n city: {city}"
 
         # Get LLM response
         llm_response = llm_chain.predict(
